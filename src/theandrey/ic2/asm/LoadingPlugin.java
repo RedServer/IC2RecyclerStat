@@ -6,11 +6,13 @@ import java.util.Map;
 /**
  * @author TheAndrey
  */
+@IFMLLoadingPlugin.MCVersion(value = "1.7.10")
+@IFMLLoadingPlugin.SortingIndex(1001) // SRG
 public final class LoadingPlugin implements IFMLLoadingPlugin {
 
 	@Override
 	public String[] getASMTransformerClass() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return new String[]{ClassTransformer.class.getName()};
 	}
 
 	@Override
