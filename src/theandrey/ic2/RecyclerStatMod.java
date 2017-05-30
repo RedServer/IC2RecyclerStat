@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
  * Мод выполняет сбор статистики использования утилизатора
  * @author TheAndrey
  */
-@Mod(modid = RecyclerStatMod.MOD_ID, name = RecyclerStatMod.MOD_NAME, version = RecyclerStatMod.MOD_VERSION)
+@Mod(modid = RecyclerStatMod.MOD_ID, name = RecyclerStatMod.MOD_NAME, version = RecyclerStatMod.MOD_VERSION, acceptableRemoteVersions = "*")
 public final class RecyclerStatMod {
 
 	public static final String MOD_ID = "ic2_recyclerstat";
