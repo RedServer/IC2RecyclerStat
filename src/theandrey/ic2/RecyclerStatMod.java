@@ -22,6 +22,7 @@ public final class RecyclerStatMod {
 
 	@Mod.EventHandler
 	public void handleServerStart(FMLServerStartingEvent event) {
+		event.registerServerCommand(new CommandDumpStats());
 	}
 
 	public static void hook_getOutputFor(ItemStack stack, boolean adjustInput) {
