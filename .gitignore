@@ -1,6 +1,7 @@
 /dist
 /build
-/nbproject/private
+/nbproject
+/build.xml
 
 # Windows image file caches
 Thumbs.db
