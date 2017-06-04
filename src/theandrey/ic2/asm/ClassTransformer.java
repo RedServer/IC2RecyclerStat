@@ -1,5 +1,6 @@
 package theandrey.ic2.asm;
 
+import cpw.mods.fml.relauncher.FMLRelaunchLog;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -20,13 +21,9 @@ public final class ClassTransformer implements IClassTransformer {
 	@Override
 	public byte[] transform(String origName, String name, byte[] bytes) {
 		if(name.equals("ic2.core.block.machine.tileentity.TileEntityRecycler$RecyclerRecipeManager")) {
-			ClassNode node = new ClassNode();
-			ClassReader reader = new ClassReader(bytes);
-			reader.accept(node, 0);
+			ClassNode node = readClass(bytes);
 			processRecyclerRecipeManager(node);
-			ClassWriter writer = new ClassWriter(0);
-			node.accept(writer);
-			return writer.toByteArray();
+			return writeClass(node);
 		}
 		return bytes;
 	}
@@ -39,10 +36,23 @@ public final class ClassTransformer implements IClassTransformer {
 				list.add(new VarInsnNode(Opcodes.ILOAD, 2)); // #2 параметр
 				list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, Type.getInternalName(RecyclerStatMod.class), "hook_getOutputFor", "(Lnet/minecraft/item/ItemStack;Z)V", false)); // #1 param
 				method.instructions.insert(list);
-				System.out.println("getOutputFor() PATCHED!");
+				FMLRelaunchLog.info("[RecyclerStat] Method RecyclerRecipeManager.getOutputFor() hooked.");
 				break;
 			}
 		}
+	}
+
+	private static ClassNode readClass(byte[] bytes) {
+		ClassNode node = new ClassNode();
+		ClassReader reader = new ClassReader(bytes);
+		reader.accept(node, 0);
+		return node;
+	}
+
+	private static byte[] writeClass(ClassNode node) {
+		ClassWriter writer = new ClassWriter(0);
+		node.accept(writer);
+		return writer.toByteArray();
 	}
 
 }
