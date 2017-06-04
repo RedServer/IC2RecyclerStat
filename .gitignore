@@ -1,7 +1,5 @@
-/dist
 /build
-/nbproject
-/build.xml
+/.gradle
 
 # Windows image file caches
 Thumbs.db
@@ -50,3 +48,4 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+/.nb-gradle/
