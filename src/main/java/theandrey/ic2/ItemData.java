@@ -10,7 +10,7 @@ public final class ItemData {
 	public final short damage;
 
 	public ItemData(Item item, short damage) {
-		this.item = item;
+		this.item = Objects.requireNonNull(item, "item");
 		this.damage = damage;
 	}
 
@@ -38,7 +38,7 @@ public final class ItemData {
 
 	public static ItemData create(ItemStack stack) {
 		if(stack == null) throw new IllegalArgumentException("stack is null!");
-		return new ItemData(Objects.requireNonNull(stack.getItem()), (short)stack.getItemDamage());
+		return new ItemData(stack.getItem(), (short)stack.getItemDamage());
 	}
 
 }

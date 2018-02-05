@@ -43,14 +43,14 @@ public final class Utils {
 		return path;
 	}
 
-	public static void saveItemStatDump() throws IOException {
-		ArrayList<StatEntry<ItemData>> list = new ArrayList<>(RecyclerStatMod.itemStats.size());
-		for(Map.Entry<ItemData, AtomicInteger> entry : RecyclerStatMod.itemStats.entrySet()) {
+	static void saveItemStatDump(Map<?, AtomicInteger> map, String logName) throws IOException {
+		ArrayList<StatEntry> list = new ArrayList<>(map.size());
+		for(Map.Entry<?, AtomicInteger> entry : map.entrySet()) {
 			list.add(new StatEntry(entry.getKey(), entry.getValue().get()));
 		}
 		Collections.sort(list);
 
-		Path file = getLogFileName("item-count");
+		Path file = getLogFileName(logName);
 		try (BufferedWriter writer = Files.newBufferedWriter(file, StandardCharsets.UTF_8, WRITE_OPTIONS)) {
 			PrintWriter pw = new PrintWriter(writer, true);
 			for(StatEntry entry : list) pw.println(entry);

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import org.apache.logging.log4j.Level;
 
 /**
@@ -20,9 +21,10 @@ public final class RecyclerStatMod {
 
 	public static final String MOD_ID = "ic2_recyclerstat";
 	public static final String MOD_NAME = "IC2 Recycler Stat";
-	public static final String MOD_VERSION = "1.2";
+	public static final String MOD_VERSION = "1.3";
 
 	static final Map<ItemData, AtomicInteger> itemStats = new ConcurrentHashMap<>();
+	static final Map<BlockPosition, AtomicInteger> blockStats = new ConcurrentHashMap<>();
 
 	@Mod.EventHandler
 	public void handleServerStart(FMLServerStartingEvent event) {
@@ -34,7 +36,8 @@ public final class RecyclerStatMod {
 		if(!itemStats.isEmpty()) {
 			FMLRelaunchLog.info("[RecyclerStat] Saving stats dump...");
 			try {
-				Utils.saveItemStatDump();
+				Utils.saveItemStatDump(itemStats, "item-count");
+				Utils.saveItemStatDump(blockStats, "block-count");
 			} catch (IOException ex) {
 				FMLRelaunchLog.log(Level.ERROR, ex, "[RecyclerStat] Save dump error");
 			}
@@ -49,6 +52,16 @@ public final class RecyclerStatMod {
 		if(counter == null) {
 			counter = new AtomicInteger(0);
 			itemStats.put(key, counter);
+		}
+		counter.incrementAndGet();
+	}
+
+	public static void hook_operateOnce(TileEntity tile) {
+		BlockPosition key = BlockPosition.create(tile);
+		AtomicInteger counter = blockStats.get(key);
+		if(counter == null) {
+			counter = new AtomicInteger(0);
+			blockStats.put(key, counter);
 		}
 		counter.incrementAndGet();
 	}

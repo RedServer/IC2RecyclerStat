@@ -44,7 +44,8 @@ public class CommandDumpStats extends CommandBase {
 		@Override
 		public void run() {
 			try {
-				Utils.saveItemStatDump();
+				Utils.saveItemStatDump(RecyclerStatMod.itemStats, "item-count");
+				Utils.saveItemStatDump(RecyclerStatMod.blockStats, "block-count");
 				sender.addChatMessage(new ChatComponentText("Дамп статистики успешно сохранён"));
 			} catch (IOException ex) {
 				sender.addChatMessage(new ChatComponentText("Ошибка записи файла: " + ex.toString()));
