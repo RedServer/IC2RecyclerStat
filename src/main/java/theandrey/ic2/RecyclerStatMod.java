@@ -7,7 +7,7 @@ import cpw.mods.fml.relauncher.FMLRelaunchLog;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import net.minecraft.item.Item;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.minecraft.item.ItemStack;
 import org.apache.logging.log4j.Level;
 
@@ -20,9 +20,9 @@ public final class RecyclerStatMod {
 
 	public static final String MOD_ID = "ic2_recyclerstat";
 	public static final String MOD_NAME = "IC2 Recycler Stat";
-	public static final String MOD_VERSION = "1.1";
+	public static final String MOD_VERSION = "1.2";
 
-	static final Map<Item, Integer> stats = new ConcurrentHashMap<>();
+	static final Map<ItemData, AtomicInteger> itemStats = new ConcurrentHashMap<>();
 
 	@Mod.EventHandler
 	public void handleServerStart(FMLServerStartingEvent event) {
@@ -31,10 +31,10 @@ public final class RecyclerStatMod {
 
 	@Mod.EventHandler
 	public void handleServerStop(FMLServerStoppingEvent event) {
-		if(!stats.isEmpty()) {
+		if(!itemStats.isEmpty()) {
 			FMLRelaunchLog.info("[RecyclerStat] Saving stats dump...");
 			try {
-				CommandDumpStats.saveStatDump();
+				Utils.saveItemStatDump();
 			} catch (IOException ex) {
 				FMLRelaunchLog.log(Level.ERROR, ex, "[RecyclerStat] Save dump error");
 			}
@@ -44,9 +44,13 @@ public final class RecyclerStatMod {
 	public static void hook_getOutputFor(ItemStack stack, boolean adjustInput) {
 		if(!adjustInput || stack == null) return; // ждём завершения обработки
 
-		Item item = stack.getItem();
-		int count = stats.getOrDefault(item, 0);
-		stats.put(item, count + 1);
+		ItemData key = ItemData.create(stack);
+		AtomicInteger counter = itemStats.get(key);
+		if(counter == null) {
+			counter = new AtomicInteger(0);
+			itemStats.put(key, counter);
+		}
+		counter.incrementAndGet();
 	}
 
 }

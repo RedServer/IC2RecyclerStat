@@ -7,6 +7,7 @@ import java.util.Map;
  * @author TheAndrey
  */
 @IFMLLoadingPlugin.MCVersion(value = "1.7.10")
+@IFMLLoadingPlugin.TransformerExclusions("theandrey.ic2.asm.")
 @IFMLLoadingPlugin.SortingIndex(1001) // SRG
 public final class LoadingPlugin implements IFMLLoadingPlugin {
 

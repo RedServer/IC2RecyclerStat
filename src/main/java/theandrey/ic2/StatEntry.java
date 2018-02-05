@@ -1,12 +1,14 @@
 package theandrey.ic2;
 
-public final class StatEntry implements Comparable<StatEntry> {
+import java.util.Objects;
 
-	public final String itemId;
+public final class StatEntry<K> implements Comparable<StatEntry> {
+
+	public final K key;
 	public final int count;
 
-	StatEntry(String itemId, int count) {
-		this.itemId = itemId;
+	StatEntry(K key, int count) {
+		this.key = Objects.requireNonNull(key, "key");
 		this.count = count;
 	}
 
@@ -17,7 +19,7 @@ public final class StatEntry implements Comparable<StatEntry> {
 
 	@Override
 	public String toString() {
-		return itemId + " x " + count;
+		return String.format("%9d - %s", count, String.valueOf(key));
 	}
 
 }
